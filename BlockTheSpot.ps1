@@ -28,7 +28,8 @@ try {
   | Set-Location
 } catch {
   Write-Output $_
-  Sleep
+  Pause
+  exit
 }
 
 Write-Host 'Downloading latest patch (chrome_elf.zip)...'
