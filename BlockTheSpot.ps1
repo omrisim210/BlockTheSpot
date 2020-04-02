@@ -43,7 +43,8 @@ try {
   )
 } catch {
   Write-Output $_
-  Sleep
+  Pause
+  exit
 }
 Expand-Archive -Force -LiteralPath "$PWD\chrome_elf.zip" -DestinationPath $PWD
 Remove-Item -LiteralPath "$PWD\chrome_elf.zip"
@@ -63,7 +64,8 @@ Downloading Latest Spotify full setup, please wait...
     )
   } catch {
     Write-Output $_
-    Sleep
+    Pause
+    exit
   }
 
   Write-Host 'Running installation...'
