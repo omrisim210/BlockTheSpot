@@ -76,14 +76,15 @@ Downloading Latest Spotify full setup, please wait...
 $backupExists = (Test-Path -LiteralPath "$SpotifyDirectory\chrome_elf.dll.bak")
 if (-not $backupExists) {
   Write-Host 'Backing up stock chrome_elf.dll...'
-  Move-Item -LiteralPath $SpotifyDirectory `
-            -Destination $SpotifyDirectory
+  Copy-Item -LiteralPath "$SpotifyDirectory\chrome_elf.dll" `
+            -Destination "$SpotifyDirectory\chrome_elf.dll.bak"
 }
 
 Write-Host 'Patching Spotify...'
 $patchFiles = "$PWD\chrome_elf.dll", "$PWD\config.ini"
 # TODO: figure out if this needs admin privileges
-Copy-Item -LiteralPath $patchFiles -Destination "$SpotifyDirectory"
+# TODO: maybe back up the previous config, overwriting an existing backup?
+Copy-Item -Force -LiteralPath $patchFiles -Destination "$SpotifyDirectory"
 Remove-Item -LiteralPath $patchFiles
 
 $tempDirectory = $PWD
