@@ -69,7 +69,7 @@ Downloading Latest Spotify full setup, please wait...
   }
 
   Write-Host 'Running installation...'
-  Start-Process -FilePath "$PWD\SpotifyFullSetup.exe"
+  Start-Process -Wait -FilePath "$PWD\SpotifyFullSetup.exe"
   Remove-Item -LiteralPath "$PWD\SpotifyFullSetup.exe"
 }
 
