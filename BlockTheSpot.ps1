@@ -1,16 +1,5 @@
-;;;===,,,@echo off
-;;;===,,,findstr /v "^;;;===,,," "%~f0" > "%~dp0ps.ps1"
-;;;===,,,PowerShell.exe -ExecutionPolicy Bypass -Command "& '%~dp0ps.ps1'"
-;;;===,,,del /s /q "%~dp0ps.ps1" >NUL 2>&1
-;;;===,,,pause
 # Ignore errors from `Stop-Process`
 $PSDefaultParameterValues['Stop-Process:ErrorAction'] = 'SilentlyContinue'
-
-write-host @'
-***************** 
-Author: @rednek46
-***************** 
-'@
 
 $SpotifyDirectory = "$env:APPDATA\Spotify"
 $SpotifyExecutable = "$SpotifyDirectory\Spotify.exe"
@@ -78,18 +67,23 @@ Downloading Latest Spotify full setup, please wait...
     exit
   }
   mkdir $SpotifyDirectory >$null 2>&1
+  #fixes the spotify installation error
   Write-Host 'Running installation...'
   Start-Process -FilePath "$PWD\SpotifyFullSetup.exe"
   Write-Host 'Stopping Spotify...Again'
+  #to patch
   while ((Get-Process -name Spotify -ErrorAction SilentlyContinue) -eq $null){
      #waiting until installation complete
-     }
+    #empty loop, because i cant use the "-wait" on start process as the installer opens the spotify after installation which pauses the script.
+  }
   Stop-Process -Name Spotify >$null 2>&1
   Stop-Process -Name SpotifyWebHelper >$null 2>&1
-  Stop-Process -Name SpotifyFullSetup >$null 2>&1
+  Stop-Process -Name SpotifyFullSetup >$null 2>&1 
+  #the installer pops a new error at the end of installation, so it is forced to stop. No Harm in that.
 }
 
 if (!(test-path $SpotifyDirectory/chrome_elf.dll.bak)){
+    #backupexist and checking seems not to be working. so its change
 	move $SpotifyDirectory\chrome_elf.dll $SpotifyDirectory\chrome_elf.dll.bak >$null 2>&1
 }
 
@@ -100,7 +94,8 @@ Copy-Item -LiteralPath $patchFiles -Destination "$SpotifyDirectory"
 $tempDirectory = $PWD
 Pop-Location
 
-Remove-Item -Recurse -LiteralPath $tempDirectory  
+Remove-Item -Recurse -LiteralPath $tempDirectory 
+#clears the bts-temp folder even if installation unsuccessfull/folder not empty. 
 
 Write-Host 'Patching Complete, starting Spotify...'
 Start-Process -WorkingDirectory $SpotifyDirectory -FilePath $SpotifyExecutable
